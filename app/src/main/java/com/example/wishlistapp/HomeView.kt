@@ -46,7 +46,7 @@ fun HomeView(
 
         topBar = {AppBarView(title = "WishList App"
         , onBackClick = {})
-        }, containerColor = colorResource(id = R.color.background), floatingActionButton ={
+        }, floatingActionButton ={
             FloatingActionButton(
                 modifier = Modifier.padding(all=20.dp),
                 onClick = {
@@ -85,14 +85,14 @@ fun WishListItem(wish: Wish, onClick:()->Unit){
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
             .clickable {
                 onClick()
             },
         shape= RectangleShape,
         colors = CardColors(containerColor = Color.White, contentColor = Color.Black,disabledContainerColor = Color.Gray,
             disabledContentColor = Color.DarkGray),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+        elevation = CardDefaults.cardElevation(10.dp),
 
     ){
         Column(modifier=Modifier.padding(16.dp)) {
