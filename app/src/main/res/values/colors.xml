@@ -8,9 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="app_bar_color">#1B023B</color>
-    <color name="label_focused">#000000</color>
-    <color name="border_focused">#1B023D</color>
-    <color name="label_unfocussed">#3A373E</color>
-    <color name="border_unfocussed">#524B5B</color>
-    <color name="background">#BAB9BB</color>
+    <color name="label_focused_light">#000000</color>
+    <color name="border_focused_light">#1B023D</color>
+    <color name="label_unfocussed_light">#3A373E</color>
+    <color name="border_unfocussed_light">#524B5B</color>
+    <color name="background_light">#BAB9BB</color>
+
 </resources>
