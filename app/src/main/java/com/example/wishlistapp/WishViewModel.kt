@@ -26,6 +26,7 @@ class WishViewModel(
         wishDescriptionState=value
     }
     lateinit var getAllWishes:Flow<List<Wish>>
+
     init {
         viewModelScope.launch {
             getAllWishes=wishRepository.getWishes()
@@ -41,10 +42,8 @@ class WishViewModel(
             wishRepository.updateWish(wish)
         }
     }
-    fun getWishById(id: Long){
-        viewModelScope.launch(Dispatchers.IO) {
-            wishRepository.getWishById(id)
-        }
+    fun getWishById(id: Long): Flow<Wish> {
+        return wishRepository.getWishById(id)
     }
     fun deleteWish(wish: Wish){
         viewModelScope.launch(Dispatchers.IO) {

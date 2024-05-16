@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -51,7 +52,7 @@ fun HomeView(
                 modifier = Modifier.padding(all=20.dp),
                 onClick = {
                 //add icon
-                navController.navigate(Screen.ItemScreen.route)
+                navController.navigate(Screen.ItemScreen.route +"/0L")
                 },
                 shape = CircleShape,
                 contentColor = Color.White,
@@ -64,10 +65,13 @@ fun HomeView(
             
             
         }) {
+        val wishList=viewModel.getAllWishes.collectAsState(initial = listOf())
         LazyColumn(modifier = Modifier.padding(it)){
-            items(Dummywish.wishlist){
+            items(wishList.value){
                 wish->
                 WishListItem(wish = wish) {
+                    val id=wish.id
+                    navController.navigate(Screen.ItemScreen.route +"/$id")
 
                 }
 
