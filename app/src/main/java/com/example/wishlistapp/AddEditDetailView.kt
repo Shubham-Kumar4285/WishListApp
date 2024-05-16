@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,13 +33,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.wishlistapp.data.Wish
 
 @Composable
 fun AddEditDetailView(
     id:Long,
     viewModel:WishViewModel,
     navController: NavController
-){
+){  val snackMessage=remember{ mutableStateOf("") }
+    val scope= rememberCoroutineScope()
+    val scaffoldState= rememberScaffoldState()
 
     Scaffold(topBar = {
         AppBarView(
@@ -62,9 +69,14 @@ fun AddEditDetailView(
             Spacer(modifier = Modifier.height(20.dp))
             Button(onClick = {
                              if(viewModel.wishTitleState.isNotEmpty() && viewModel.wishDescriptionState.isNotEmpty()){
-                                    //update wish
+                                    if(id!=0L){
+
+                                    }else{
+//                                        viewModel.addWish(Wish(title=viewModel.wishTitleState.trim(), description = viewModel.wishDescriptionState.trim()))
+//                                        snackMessage.value="Wish has been added"
+                                    }
                              }else{
-                                 //add wish
+                                 snackMessage.value="Enter the fields to create a Wish"
                              }
                              }, modifier = Modifier
                 .fillMaxWidth()
@@ -89,7 +101,7 @@ fun WishTextField(
     value:String,
     onValueChanged:(String)->Unit
 ){
-    OutlinedTextField(value = label, onValueChange = onValueChanged,label={ Text(text = label, color = Color.Black)}, modifier = Modifier
+    OutlinedTextField(value = value, onValueChange = onValueChanged,label={ Text(text = label, color = Color.Black)}, modifier = Modifier
         .fillMaxWidth()
         .padding(start = 10.dp, end = 10.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
