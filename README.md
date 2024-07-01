@@ -36,6 +36,11 @@ Future Enhancements
 
 ->Enhanced analytics integration.
 
+![s1](https://github.com/Shubham-Kumar4285/WishListApp/assets/130894954/358cac61-12c9-4bb8-97c8-cb31702d15b8)
+![s2](https://github.com/Shubham-Kumar4285/WishListApp/assets/130894954/510c1348-9337-478d-bcf0-d434ab00c780)
+![s3](https://github.com/Shubham-Kumar4285/WishListApp/assets/130894954/65d9996d-0261-4692-aa69-258a9cb09f78)
+![s4](https://github.com/Shubham-Kumar4285/WishListApp/assets/130894954/b79a375b-e61e-4083-9128-f8f0202acf53)
+
 
 
 
