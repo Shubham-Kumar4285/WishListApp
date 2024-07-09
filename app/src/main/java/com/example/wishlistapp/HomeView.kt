@@ -4,11 +4,20 @@ package com.example.wishlistapp
 import android.content.res.Resources.Theme
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,13 +67,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.wishlistapp.data.Dummywish
 import com.example.wishlistapp.data.Wish
+import com.example.wishlistapp.ui.theme.Pink40
+import com.example.wishlistapp.ui.theme.greyNew
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.burnoutcrew.reorderable.NoDragCancelledAnimation
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun HomeView(
     navController: NavController,
@@ -96,10 +112,14 @@ fun HomeView(
         }) { it ->
 //        val wishList=viewModel.getAllWishes.collectAsState(initial = listOf())
         val wishList by viewModel.getAllWishes.collectAsState(initial = emptyList())
-        //var items by remember { mutableStateOf(wishList.value) }
 
 
-        val state = rememberReorderableLazyListState(onMove = { from, to ->
+
+
+
+        val state = rememberReorderableLazyListState(
+            dragCancelledAnimation = NoDragCancelledAnimation(),
+            onMove = { from, to ->
             if(to.index!=from.index){
                 val updatedList = wishList.toMutableList()
                 val draggedItem= updatedList[from.index]
@@ -109,9 +129,14 @@ fun HomeView(
                 updatedList[from.index]=toItem
                 updatedList[to.index]=draggedItem
 
+                // Update ViewModel with the reordered list
                 viewModel.updateItems(updatedList)
+
+
             }
         })
+
+
 //
 //        var text=""
 //
@@ -131,6 +156,12 @@ fun HomeView(
                 .detectReorderAfterLongPress(state)){
             items(wishList, key = {wish->wish.id}){
                 wish->
+
+
+
+
+                ReorderableItem(state, key = wish.id,defaultDraggingModifier = Modifier) { isDragging ->
+
 
                 val dismissState= rememberDismissState(
                     confirmStateChange = {
@@ -159,27 +190,31 @@ fun HomeView(
                     dismissThresholds = {FractionalThreshold(0.8f)}
                 ) {
 
-                    ReorderableItem(state, key = wish.id) { isDragging ->
-
                         val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp)
-                        WishListItem(wish = wish, onClick =  {
-                        val id = wish.id
-                        navController.navigate(Screen.ItemScreen.route + "/$id") })
-                        }
-                    }
+                        WishListItem(wish = wish,isDragging=isDragging, onClick =  {
+                            val id = wish.id
+                            navController.navigate(Screen.ItemScreen.route + "/$id") })
+                }
+
 
 
             }
 
-        }
 
+                    }
+                }
     }
 
 
-}
+            }
+
 
 @Composable
-fun WishListItem(wish: Wish, onClick:()->Unit){
+fun WishListItem(wish: Wish,isDragging:Boolean, onClick:()->Unit) {
+    val color =if(isDragging && isSystemInDarkTheme()){
+        greyNew}else if (isDragging){
+        Pink40}else
+    {MaterialTheme.colorScheme.surfaceBright}
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -187,24 +222,23 @@ fun WishListItem(wish: Wish, onClick:()->Unit){
             .clickable {
                 onClick()
             },
-        shape= RectangleShape,
-        colors = CardColors(containerColor = MaterialTheme.colorScheme.surfaceBright, contentColor = MaterialTheme.colorScheme.inverseSurface,disabledContainerColor = Color.Gray,
-            disabledContentColor = Color.DarkGray),
+        shape = RectangleShape,
+        colors = CardColors(
+            containerColor = color,
+            contentColor = MaterialTheme.colorScheme.inverseSurface,
+            disabledContainerColor = Color.Gray,
+            disabledContentColor = Color.DarkGray
+        ),
         elevation = CardDefaults.cardElevation(10.dp),
 
-    ){
-        Column(modifier=Modifier.padding(16.dp)) {
+        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(text = wish.title, fontWeight = FontWeight.ExtraBold)
             Text(text = wish.description)
 
         }
 
     }
-
 }
-@Preview(showBackground = true)
-@Composable
-fun itemprev(){
 
-    WishListItem(wish = Wish(12,"ddsfs","sdfsf"),{})
-}
+
