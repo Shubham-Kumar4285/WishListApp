@@ -11,7 +11,9 @@ data class Wish(
     @ColumnInfo(name ="title")
     val title:String="",
     @ColumnInfo(name ="description")
-    val description:String=""
+    val description:String="",
+    @ColumnInfo(name ="Position")
+    var position:Int=0
 )
 object Dummywish{
     val wishlist= listOf<Wish>(Wish(1,"Cake","Cake is lie"),

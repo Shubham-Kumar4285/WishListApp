@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.wishlistapp.data.Wish
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -73,6 +74,8 @@ fun AddEditDetailView(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
             ) {
+
+            val position = viewModel.getAllWishes.collectAsState(initial = emptyList()).value.size
             Spacer(modifier = Modifier.height(10.dp))
             WishTextField(label = "Title", value = viewModel.wishTitleState, onValueChanged = {
                 viewModel.onWishTitleChange(it)
@@ -90,7 +93,8 @@ fun AddEditDetailView(
                                         )
 
                                     }else{
-                                      viewModel.addWish(Wish(title=viewModel.wishTitleState.trim(), description = viewModel.wishDescriptionState.trim()))
+
+                                      viewModel.addWish(Wish(title=viewModel.wishTitleState.trim(), description = viewModel.wishDescriptionState.trim(), position = position+1))
                                         snackMessage.value="Wish has been added"
                                     }
                              }else{

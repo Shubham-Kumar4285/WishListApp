@@ -1,5 +1,6 @@
 package com.example.wishlistapp
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,6 +20,7 @@ class WishViewModel(
     var wishDescriptionState by mutableStateOf("")
 
 
+
     fun onWishTitleChange(value:String){
         wishTitleState=value
     }
@@ -29,7 +31,7 @@ class WishViewModel(
 
     init {
         viewModelScope.launch {
-            getAllWishes=wishRepository.getWishes()
+            getAllWishes=wishRepository.getWishesByPosition()
         }
     }
     fun addWish(wish: Wish){
@@ -49,6 +51,9 @@ class WishViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             wishRepository.deleteWish(wish)
         }
+    }
+    fun updateItems(items: List<Wish>) = viewModelScope.launch(Dispatchers.IO) {
+        getAllWishes=wishRepository.updateAll(items)
     }
 
 }

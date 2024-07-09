@@ -51,6 +51,8 @@ android {
 }
 
 dependencies {
+
+    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
     implementation("androidx.compose.material3:material3-android:1.2.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
     implementation("androidx.navigation:navigation-compose:2.7.7")
