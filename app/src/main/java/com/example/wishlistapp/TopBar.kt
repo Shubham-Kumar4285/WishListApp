@@ -11,6 +11,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 
 
@@ -25,7 +27,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppBarView(
     title: String,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onDrawerClick:()->Unit={}
 ) {
     val navigationIcon: (@Composable () -> Unit) ? = if(!title.contains("WishList")) {
         {
@@ -33,7 +36,15 @@ fun AppBarView(
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, tint = Color.White, contentDescription = null )
         }
     }
-    } else null
+    } else {
+        {
+
+        IconButton(onClick = { onDrawerClick()}) {
+            Icon(imageVector = Icons.Default.AccountCircle, tint = Color.White, contentDescription = "profileInfo")
+
+            }
+        }
+    }
 
 
 

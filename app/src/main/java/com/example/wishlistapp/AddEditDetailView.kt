@@ -63,9 +63,10 @@ fun AddEditDetailView(
         topBar = {
         AppBarView(
             title =
-            if (id != 0L) stringResource(id = R.string.update_name) else stringResource(id = R.string.add_name)
+            if (id != 0L) stringResource(id = R.string.update_name) else stringResource(id = R.string.add_name),
+            onBackClick = {navController.navigateUp()}
         )
-        {navController.navigateUp()}
+
 
     }) { item ->
         Column(modifier = Modifier
@@ -104,14 +105,14 @@ fun AddEditDetailView(
                                       viewModel.addWish(Wish(title=viewModel.wishTitleState.trim(), description = viewModel.wishDescriptionState.trim(), position = position+1))
                                         snackMessage.value="Wish has been added"
                                     }
+                                 navController.navigateUp()
                              }else{
                                  snackMessage.value="Enter the fields to create a Wish"
-                             }
+                                 scope.launch {
+                                     scaffoldState.snackbarHostState.showSnackbar(snackMessage.value)
 
-                            scope.launch {
-                                //scaffoldState.snackbarHostState.showSnackbar(snackMessage.value)
-                                navController.navigateUp()
-                            }
+                                 }
+                             }
                              }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp)
